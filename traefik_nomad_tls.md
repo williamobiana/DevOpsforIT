@@ -6,7 +6,7 @@ We will be using Traefik as a reverse proxy for our nginx containers on port HTT
 
 Cluster running nomad (container orchestrator) and consul (service discovery & health checks)\
 Basic understanding of traefik\
-TlS certificate (self-signed or provided from a Certificate Authority)
+TLS certificate (self-signed or provided from a Certificate Authority)
 
 ## Structure
 
