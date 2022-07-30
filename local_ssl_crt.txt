@@ -1,0 +1,4 @@
+# Create Self-Signed Certificates using OpenSSL on local 
+
+Reference:
+https://devopscube.com/create-self-signed-certificates-openssl/

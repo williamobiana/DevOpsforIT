@@ -1,0 +1,55 @@
+# Configure Self-Signed SSL Certificate For Nginx Docker
+
+# Run a docker container with port 443 exposed
+docker run -it -p 443:443 --name nginx-app
+
+# Exec into the container
+docker exec -it <container ID> /bin/bash
+
+# Install dependencies
+apt update
+apt install nano
+apt install openssl
+
+# Test the server with curl
+curl localhost
+
+# View the default configuration
+cd etc/nginx/conf.d 
+ls
+cat default.conf
+
+# Return to root and use openssl to generate 'key' & 'crt' files
+cd
+cd ..
+openssl req -x509 -nodes \
+    -days 365 \
+    -subj "/C=CA/ST=QC/O=Company, Inc./CN=mydomain.com" \
+    -addext "subjectAltName=DNS:mydomain.com" \
+    -newkey rsa:2048 \
+    -keyout /etc/ssl/private/nginx-selfsigned.key \
+    -out /etc/ssl/certs/nginx-selfsigned.crt;
+
+# Modify nginx default configuration for SSL
+cd etc/nginx/conf.d 
+nano default.conf
+add the commmand below in the server section (listen on port 443, add the certificat & key)
+        listen 443 ssl http2 default_server;
+        listen [::]:443 ssl http2 default_server;
+        ssl_certificate /etc/ssl/certs/nginx-selfsigned.crt;
+        ssl_certificate_key /etc/ssl/private/nginx-selfsigned.key;
+save
+
+# Verify the configuration
+nginx -t
+
+# Reload 
+nginx -s reload
+
+# Test the server with curl and insecure option
+curl localhost --insecure #because this is self-signed, withput --insecure browser will flag it.
+
+Reference:
+https://codingwithmanny.medium.com/configure-self-signed-ssl-for-nginx-docker-from-a-scratch-7c2bcd5478c6
+
+

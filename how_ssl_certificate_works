@@ -1,0 +1,17 @@
+# How SSL Certificate Works
+
+HTTPS is a sercure version of HTTP\
+HTTP (Hypertext Transport Protocol) is a protocol by the browser and webserver\
+(S) stands for  secure/secure socket layer (ssl)
+
+With HTTPS, all communications between your browser and web server are encrypted.\
+The ssl cerficate is a digtal web certificate that is issued by a certifacte authority(ca) that verifies the identity of the web server and its public key.
+
+Steps of how it works
+1. browser request page(HTTPS) from a webserver
+2. the webserver holds its private key send its public key & ssl certificate (in a single file) verified by the certificate authority(ca) to the browser
+3. browser reviews and verifies the certificate 
+4. browser creates shared secerts(key) (it keeps one and sends one to the webserver with encryption. The encryption is done with the public key)
+5. webserver recieves and decyptes it with its private key. Now the webserver has a compy of the browser shared secret(key).
+
+Now all traffic between browser and webserver is automatically encrypted.
