@@ -15,14 +15,12 @@ The goal of this article is to show how you can automate the build and deploy of
 * push to test your build.
 
 ### Configure Gitlab CI/CD variables
-For security reasons on Gitlab, it is recommended to store your sensitive informations such as password, API keys, files,...etc, in the CI/CD variables of the project settings, saved as key:value pairs.
-
-You can reference the varaible keys in your gitlab-ci.yml file, this prevents your information from becoming exposed to the public.
+For security reasons on Gitlab, it is recommended to store your sensitive informations such as password, API keys, files,...etc, in the CI/CD variables of the project settings, saved as key:value pairs. You can reference the varaible keys in your gitlab-ci.yml file, this prevents your information from becoming exposed to the public.
 
 Most CI/CD variables are predefined by default in Gitlab: https://docs.gitlab.com/ce/ci/variables/
 
 To create a new variable, you must have at least a maintainer role.\
-go to the gitlab project: `Settings > CI/CD > Variables`
+Go to the gitlab project: `Settings > CI/CD > Variables`
 
 add 3 `variables` types:
 * `AWS_ACCESS_KEY_ID` = Access ID of your AWS account
@@ -63,20 +61,20 @@ copy the section of the output containing the auths for the registry like this:
 }
 ```
 #### Create a docker-credential file
-create the `docker-cred.json` file and paste the auths.
+Create the `docker-cred.json` file and paste the auths.
 
 Note: The “auth” is the base64 encoded credentials generated with the conbination of the gitlab username:password.
 ```
 echo "gitlab_username:gitlab_password" | base64
 ```
 
-after we create the `docker-cred.json` file, encode it in base64. This will be used to create a kubernetes secret file.
+After we create the `docker-cred.json` file, encode it in base64. This will be used to create a kubernetes secret file.
 ```
 cat docker-creds.json | base64
 ```
 
 #### Create a kubernetes secret
-create the `gitlab-registry.yaml` file as seen below:
+Create the `gitlab-registry.yaml` file as seen below:
 ```
 apiVersion: v1
 kind: Secret
@@ -159,5 +157,5 @@ deployJob:
 
 ### Push and test
 Now we have out process complete, we can proceed to git add, commit and push to our branch.\
-We can verify the deployment in our cluster via the CLI or the aws webUI.
+We can verify the deployment in our cluster via the CLI or the aws webUI.\
 Depending on your needs, you could add jobs/stages to the CI and modify the manifest.
