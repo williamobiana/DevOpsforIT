@@ -152,6 +152,7 @@ deployJob:
     - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
     - export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
   script:
+    - sed -i 's/<VERSION>/'${CI_COMMIT_SHORT_SHA}'/g' deployment.yaml  #convert 'version' to '$CI_COMMIT_SHORT_SHA'
     - kubectl --kubeconfig ${KUBECONFIG} apply -f deployment.yaml
 ```
 
