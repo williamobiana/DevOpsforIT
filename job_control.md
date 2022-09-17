@@ -48,14 +48,14 @@ include:
 
 Note: because these keywords are evaluated during pipeline creation, if you make changes to the files you have to create a new pipeline to see the changes.
 
-### remote
+### remote:
 You can include a remote file that must be accessed by gitlab instance
 ```
 include:
   - remote: http://website.com/file.yaml
 ```
 
-### template
+### template:
 You can include templates from gitlab
 ```
 include:
@@ -202,7 +202,7 @@ Within the rules, we can use the clauses:
 * changes
 * exists
 
-### if
+### if:
 ```
 example_job:
   rules:
@@ -213,9 +213,9 @@ example_job:
     - echo 'Hello'
 ```
 the job evaluates the rules using if statement,
-if the condition is not met, we indicated `when: never` thus, the job will never run.
+if the condition is not met, we indicated `when:never` thus, the job will never run.
 
-### changes
+### changes:
 ```
 example_job:
   rules:
@@ -226,7 +226,7 @@ example_job:
 ```
 the job runs only if something has been changed in application folder.
 
-### exists
+### exists:
 ```
 example_job:
   script:
@@ -258,7 +258,7 @@ There are 2 types of downstream pipelines:
 * multi-project pipelines (pipeline in another project)
 * child pipelines (sub-pipeline in the same project)
 
-### multi-project pipeline
+### multi-project pipeline:
 ```
 trigger-job:
   trigger:
@@ -266,9 +266,9 @@ trigger-job:
   branch: master (optional)
   strategy: depend (optional)
 ```
-by default, the trigger-job does not wait for the its dependent pipeline to complete, if we want it to wait, we must specify `strategy: depend`
+by default, the trigger-job does not wait for the its dependent pipeline to complete, if we want it to wait, we must specify `strategy:depend`
 
-### child pipeline
+### child pipeline:
 ```
 trigger-job:
   trigger:
