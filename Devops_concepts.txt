@@ -1,0 +1,757 @@
+### COMMUNICATION ###
+Understand the question
+* reapeat by to them
+* ask them to explain what they mean 
+* what outcome are they expecting
+
+### DEVOPS ###
+
+Phases in devops
+* Plan
+* develop the solution
+* CI 
+* Automate the CD
+* Operations 
+* Monitor
+
+Benefits of devops
+* automation
+* easily rollback
+* promotes innovation
+
+What is post mortem
+* analysis of application crash
+
+Pre-requistes to devops 
+* having a function application already running and wants to be optimized
+
+How would you approach a project to implement devops?
+* understanding more about the project 
+
+What are your career goals in devops?
+* SRE 
+
+--------------
+
+### LINUX ###
+
+Building a link server 
+* symlinks (ln -s)
+
+SSH 
+* ssh keys (pub and private)
+  create with ssh-keygen
+  - id_rsa sent to server in authorised key folder 
+  - id_rsa.pub in local ssh folder 
+
+Netstat (install netstat with net-tools)
+* How to check open ports to detect an intrusion or if already in use by another application
+  - netstat -tupln | grep LISTEN
+* How to check swap memory when RAM is full, turn it on and off
+  - top, swapoff -a, swapon -a
+
+Process & service 
+* kill process without rebooting server after an update
+  - kill PID
+  - kill -9 PID #to kill immediately, aka sigkill
+  - kill -15 #gracefull kill, aka sigterm
+* start/stop services if service is not working or to run maintainance
+  - sudo service NAME start, stop, restart
+
+File system 
+* Umask for file permission 
+  * -rwx rwx rwx 
+    - file type (- regular, d directory, l link, b block, etc)
+    rwx user 
+    rwx group
+    rwx others
+  * binanry conversion
+    000 = 0
+    001 = 1
+    010 = 2
+    011 = 3
+    100 = 4
+    101 = 5
+    110 = 6
+    111 = 7
+  * Umask default value for root user 
+    - 022: 000010010 ----w--w-
+  * chmod to manage file access/permission
+* directory structure
+  * configfiles in /etc (contains configuration files)
+  * logs in /var (store runtime information like system logging)
+  * executable shell commands in /bin
+
+Operations
+* how to create zip files by compressing without losing data 
+  - zip -r file.zip file 
+  - unzip file.zip 
+* how to achive large files to backup large data and reduce space on your system 
+  - tar -czvf file.tar.gz file(create, zip, verbose, file)
+  - tar -xvf file.tar (extract, verbose, file)
+* IP tables for security uses to block unwanted traffic and redirect packets to alternatve addresses and ports 
+  - sudo iptables -S (to list rules)
+  - sudo ip6tables -S (to list rules ip6) 
+  - sudo iptables -S INPUT (to list rules for INPUT tables)
+* How to configure ufw firewall to secure a network 
+  - sudo ufw status
+  - sudo ufw allow ssh (standard ssh port 22)
+  - sudo ufw allow 2222/tcp (custom port)
+  - sudo ufw deny 2222/tcp
+  - sudo ufw limit ssh
+  - sudo ufw enable (enable firewall)
+  - sudo ufw disable (disable firewall)
+  - sudo ufw reset
+  - sudo ufw reload
+  - view logs in /var/log/ufw.log 
+
+----------------
+
+### AWS ###
+
+Best practice
+* Plan for security (IAM policies)
+* Plan for scalability (LoadBalancing)
+* Plan for disaster recovery & high availability (use automated monitoring, failure detection LoadBalancing healthchecks)
+* Plan for cost optimization (autoscaling, using lambda serveless,)
+* Plan for monitoring (cloudwatch logs)
+* Plan for archiving and storage (s3 and glacier)
+
+* IAM
+  * policies that define permissions
+    * Allow (resources & environment)
+    * Deny (resources & environment)
+  * control access to APIs with permissions so that we can manage the communication between applications and microservices
+* networking
+  * vpc (networking layer for your infrastructure)
+  * subnet (range of IP addresses in your VPC)
+  * CIDR (Classless Inter-Domain Routing. An internet protocol address allocation and route aggregation)
+  * security group (virtual firewall controlling traffic in and out of your resource)
+    * exposing external ports (443, 80, etc)
+    * Inbound rules control the incoming traffic to your instance through the port 
+    * outbound rules control the outgoing traffic from your instance through the port 
+
+
+VPC CIDR: 10.0.0.0/16
+AWS Subnet CIDR: Starts from 10
+10.0.10.0/24 (IP range: 10.0.10.0 - 10.0.10.255)
+10.0.11.0/24 (IP range: 10.0.11.0 - 10.0.11.255)
+10.0.12.0/24 (IP range: 10.0.12.0 - 10.0.12.255)
+
+CIRD: 10.0.10.0/24
+10.0.10.0 - Network address
+10.0.10.1 - Reserved for AWS
+10.0.10.2 - Reserved for AWS
+10.0.10.3 - Reserved for AWS
+10.0.10.255 - Reserved for AWS
+
+Local Network IP range
+10.0.0.0 - 10.255.255.255
+172.16.0.0 - 172.31.255.255
+192.168.0.0 - 192.168.255.255
+
+* setup an ec2
+* setup a database (RDS)
+* lambda (serveless) and its quota
+  * lamnda function for executing a defined task or set of actions like  gauge reading for an application running on an ec2 instance.
+  * lambda application that uses a combination of the lambda function + other aws resources to create a light wieght app like website or chatbot.
+* ECS manages containers similar to EKS on a smaller scale
+  - using fargate so aws can manage it for us
+  - manually setting it up
+    * build image
+    * define and deploy ec2 instances
+    * manage compute and memory resources
+    * isolate application & deploy in separate containers
+    * run and manage infrastructure
+  - AWS copilot is an automated way of deploying ECS by defining the parameters we need.
+
+* billing
+  * billing alerts
+  * reading a bill 
+  * cost management
+  * reservations
+
+-----------------
+
+### IaC ###
+
+How Terraform works
+* it uses declarative language (HCL) go from current state to desired state.
+* it uses modules to group the automation we want to perform. (providers, resource and data sources).
+* modules can be used as varaibles for other configurations in the same project 
+* when desired state has been reached, terraform creates a state.file to save it and rollback to it if something happnes.
+* state.logs can be used for monitoring and debugging.
+
+How cloudformation works
+* it uses a template file to define the steps of the aws resources should be created and deploy them.
+
+Diff btw Terraform and cloudformation
+* terraform can be used accross diffrent providers
+* cloudformation is used in aws environment 
+
+Provision Iac with Terraform
+* manual created resources on AWS.
+* document resource ids 
+* define variables for the resources in the terraform file 
+* script the module
+* run plan and apply
+
+Commands
+$ terraform init
+$ terraform plan
+$ terraform apply
+$ terraform destroy
+$ terraform destroy -target [resource] (to target a specific resource)
+$ terraform show
+$ terraform show -json
+$ terraform validate (for quick validation)
+$ terraform fmt
+$ terraform providers
+$ terraform providers mirror [file location to copy to]
+$ terraform output
+$ terraform output [variable name]
+$ terraform refresh
+$ terraform graph
+
+How to provision multiple servers/environment together for fault tolerance 
+* use terraform workspace
+* for stateful applications that have data, save them on persistent volumes so the data will not be deleted
+
+
+Troubleshoot
+* use version constraint
+* enable debug by exporting log files (export TF_LOG=DEBUG) (other levels include: trace(default), error, warn, info)
+* validate variables are correct
+
+How to automate 2 tier architecture build with Terraform
+
+Automate a manual AWS EKS build with Terraform
+
+Provision AWS resources with cloudformation
+* RDS
+* lambda 
+* fargate
+* boto.3 library allows you to directly create, update, and delete AWS resources from your Python scripts.
+
+Store your Iac flow in repo and manage it secrets with CI/CD variables 
+
+----------------
+
+### DOCKER ###
+
+Start & Stop containers
+Exec a running container
+
+Writing Dockerfiles
+* FROM base image 
+* ENTRYPOINT cmd to exectute container 
+* ENV environment varaible
+* WORKDIR working/current directory
+* RUN execute a cmd during image build 
+* CMD exectute a cmd when container is launched/deployed 
+* COPY copy from host directory to container 
+* ADD copy and unzip from a URL
+* EXPOSE open a port on container 
+
+Diff btw container and VM
+* container: hardware, os, runtime_engine, libs, apps 
+* hardware, hyper-v, guestOS, libs, apps
+
+Container networking
+* default bridge network (docker 0) acting as a router for containers connected to it (this is the default when you run containers)
+* user defined bridge/self created network (similar to default but specify --network NETWORK NAME in command when running a container)
+  - docker network create my-custom-network
+
+Image Tagging for easy image pull, run and automatic update rollout
+* docker tag <containerid> <yourtag>
+
+Multi-stage build in dockerfile to create a Docker image through a series of steps. Each stage accomplishes a task with its dockerhub image environment 
+* using multiple FROM commands in the dockerfile for each specifc step
+
+Docker in Docker to run a docker container in a docker container
+* use command FROM docker in a dockerfile
+* use image docker and service dind for CI builds
+
+Container logs for debug
+* docker logs <container_name>
+* docker logs -f --tail <N> <container_name>
+
+----------------
+
+### K8S ###
+
+Nodes
+* Control Plane (master)
+  - api for communication 
+  - scheduler for application deployment on the nodes 
+  - control manager to manage the state of the cluster and resources like loadbalancers and network routes
+  - etcd for storage of all the configurations (the cluster state, the application image, the api configs & objects)
+
+
+* Nodes (worker)
+  - kubelet for scheduleing and keeping nodes healthy
+  - CRI (container runtime interface) to communicate with the runtime engine of the container 
+  - proxy for internal & external communication (clusterIP & loadbalancer)
+
+* communication between master and worker
+  - kubctl - api - scheduler - api - kublet - CRI - pod 
+
+* Adding and removing nodes
+- create a master node:
+  - setup a server designated control plane 
+  - save the ip in the etc/network/interface to make it static
+  - install docker and CRI runtime and configure the services
+  - install kubernetes kubeltet kubeadm kubectl
+  - install net-tools and and add ipaddr to the etc/host 
+  - pull images for kubernetes using docker CRI
+  - run kubeadm init with defined CIDR network and CRI socket
+  - create the kube config file
+  - use a pod communication network like calico and modify the CIDR addr to aviod conflict.
+
+- create a worker node:
+  - setup a server designated worker 
+  - save the ip in the etc/network/interface to make it static
+  - install docker and CRI runtime and configure the services
+  - install kubernetes kubeltet kubeadm kubectl
+  - install net-tools and and add ipaddr to the etc/host
+  - create a token and generate a certificate hash on master 
+  - join the worker to the master using the token and hash 
+
+- delete a node
+  - kubectl get the nodes 
+  - kubectl drain the node of choice, you can delete the daemonsets and delete the data if needed
+  - kubectl delete the node
+  - kubeadm reset the cluster 
+
+for AWS EKS
+* create a node group 
+  - define maxsize and minsize and desiredsize in command 
+
+
+Pods
+- image: [application image]
+- name: [metadata for the pod]
+- liveliness probe: [to check if container is running]
+- port
+- readiness probe: [to check if container is receiving pings]
+- resources: [specifying computer resources]
+- volume mounts: [specifying the mount path for the volume]
+- node selector: [selecting an ec2 (node) based the type of app]
+- volume: [node volume (emptydir), aws, pvc]
+
+Main workloads to run a pod:
+- deployment & replicaset: (deploy the pod & create replicas for high availability)
+- statefulset: (remembers the pod's data and attributes, for identification, replication and scaling)
+- daemonset: (remembers the pod and ensures a copy of it is always running on all nodes)
+- job & cronjob: (jobs runs tasks on pods to completion eg: backups. cronjob schedules when to run the tasks)
+
+
+Deployment
+- we can use the nodeSelector in the deployment.yaml to specify which node we want to deploy to the pod to (we must label the node first to identify it)
+- init container: containers used as prerequisite to prepare and check out the source code
+
+Service
+- ClusterIP
+- NortPort service as an external entry point for incoming requests (extension of ClusterIP)
+- LoadBalancing service as external entrypoint for incoming request (extension of nodePort: 1 or more NodePort)
+
+
+Configuration Resources
+* secrets that can be refrenced in the manifests or mounted as volumes 
+* configmap for the pods and replicas
+* custom resources are extensions that are not avalibable in kubernetes 
+
+Addons
+* DNS can be modified in the coreDNS configmap 
+* webUI can be accessed by deploying kubernetes dashboard and running a kubctl proxy 
+* cluster level logs: run a node logging agent that aggregates logs as a daemonset 
+* monitoring: you can kubectl apply a metrics server from helm and control plan should reach it 
+
+Provision nodes on EKS
+* storage
+  * pv
+    - concept of persistent volume:
+      external storage/state of data in-case the pod goes down.
+      it can be static (pv) or dynamic storage class (ebs, azure, etc)
+      PV lifeclycle:
+        when you delete, you have 3 options for reclaim policy
+        1. retain (to keep it, incase you wanna debug you volume if an app crashes)
+        2. recycle (for dynamic provisioning)
+        3. delete (if you delete pod and cliam)
+  * pvc
+    - is a claim used to access the pv and defined resources
+  * storage class
+    - it has to be explicity defined, else the pvc will bind to the pv by default
+  * storage type
+    - nfs
+    - ebs
+    - google pd 
+
+Characteristics of statefulset:
+- unique name (remount a new pod with same name, when old ones are unhealthy)
+- unique network ID (remount a new pod on same networkID when old ones are unhealthy)
+- unique stable storage: (uses the same storage for the new pods when old ones are unhealthy)
+- ordered provisioning (when multiple pods: provision the pods in order)
+note:
+it is stateful because the data is stored in PV
+if the data is not stored, it is a stateless application.
+
+
+Security 
+* node security (remove unnessary user, avoid running as root, remove unused apps/libs)
+* api (making sure the RBAC policies are secure)
+* cluster network (create network that is isolated from the internet and can only be accessed when nessesary)
+* container pod (RBAC, isolated pod network)
+* data (backup data, and eusure data saftey in external volumes)
+* namespaces (RBAC)
+
+
+Namespace
+* run pods as non root 
+* choose volumes a pod should use
+* access service from 1 namespace to another namspace (namspace object) 
+
+API access for teams or services 
+* RBAC to access the namespace of the cluster using private key and certificate
+  - role giving a user permission to a namespace in a cluster
+  - clusterRole is for the full cluster
+  - RoleBinding is binding the role to the user 
+  - steps:
+    - create namespace 
+    - create certificate signing request 
+    - create private key & create certificate
+    - sign certificate for user
+    - create kubeconfigfile with context cluster and user parameters
+    - create role.yaml & rolebinding.yaml for the user/group/service 
+
+
+Ingress for traffic routing 
+* define the route rules in the manifest to the desired service 
+
+LoadBalancing
+* load balancer using traefik 
+* ingress + middleware (example redirect to https)
+* ingress + round robin
+* target group and listeners in load balancing
+
+Resource quota & limits
+Addmission controller
+  - mutating webook: resource is allocated but changed after a while, the webhook picks this up.
+  - violating webhook: resources violation the config, and webhook picks it up 
+
+
+-------------------
+
+### CI/CD ###
+
+How does Git or VCS (version control sysytem) work
+* track the versions of applications and tracks the steps of changes made.
+
+What is Gitops (operation as code OaC)
+* operations done in git for building applications and servers (using yaml files)
+
+What is Continous Intergration
+
+What is a pipleline
+
+Pipeline stages
+* build
+* test to run unit test
+* Packaging
+* deploy to cluster
+
+Continuos Delivery vs Continous Deployment
+* continuos delivery (automated release) 
+* continous deployment (automated deploy) 
+
+What is merge conflict?
+* Changes made to 2 different branches of master, conflict occurs on merge request of the 2 branches to master.
+
+How to move all repositories managed by GitLab to another file system or another server.
+
+-------------------
+
+### AUTOMATION ###
+
+Automate CI/CD workflow with gitlab-ci.yml 
+Automate Infrastructure
+Automate Database backup and restore 
+
+--------------------
+
+### SCRIPTING ###
+Look at this code and determine the output
+* try to figure out the logic, ask them to explain the logic to you.
+
+
+-------------------
+
+
+### JENKINS ###
+
+jenkins is an open source tool, it uses a lot of plugins for its operations 
+
+how does jecnkins work?
+* code commit to git, jenkins detects code change, build, deploy to prod, jenkins gives feedback
+
+benefits of using jenkins
+* caches failed builds
+* auto build repot notification
+* ci
+* trackcing bugs
+
+pre-requistes to use jenkins
+* source code repo 
+* a working build script (eg: jenkinscript)
+
+credential for jobs in jenkins (ci/cd-varaibles)
+* global - store credential and use to run jobs in pipeline
+* system - credential to authenticate 3rd party software. example slack 
+
+blue ocean 
+- UI interface for pipeline 
+
+default port for jenkins 
+* 80:80
+
+shared library are common code for more than 1 pipeline job. thet are stored seperately
+* dependencies library for a build 
+
+some useful plugins in jenkins
+* maven 2
+* git 
+* aws ec2 
+* copy artifact (used artifact to store job builds)
+* html publisher
+* join 
+* credentials plugin 
+
+installing jenkins 
+* install java 8
+* install apache tomcat 9
+* download & deploy jenkins war 
+* install the required plugins 
+
+main intergrations
+* git (source code repo)
+* maven (build managmemt plugin)
+  maven uses pom.xml to configure all dependencies needed to build, test, run code.
+
+commands to start jenkins manually 
+* jenkins.exe start, stop, restart 
+
+what is post and parameters in jenkins?
+* its an after script step when a pipeline is complete
+* parameters are requirments used to support the build process in the pipeline 
+
+what is groovy?
+* groovy is a scripting language for jenkins designed for the java platform
+
+How to clone a repo via jenkins?
+* enter username and email for jenkins, switch to job directory and use the command git config.
+
+how to setup a jenkins job.
+* build a free software side project, add the SCM, triggers to perform builds, buildscript, archiving the build, notification 
+
+creating backup files in jenkins 
+* backup the home dir that contains all configs, jobs and history using thinbackup.
+
+how to secure jenkins 
+* authentication, authorization, security realms, RBAC 
+    * turn on global security and ensure the organization is intergrated with the correct user directory and appropraite plugin 
+    * ensure the project matrix is enable to fine tune the axis.
+    * automate the process of setting rights and privilages with a version control script or limiting access secure folders
+    * periodically run security audits.
+
+how to deploy a custom build of a core plugin 
+* stop jenkins
+* copy the HPI.file (plugin file) to jenkins_home/plugins
+* delete the previously expanded plugin directory
+* make an empty file called <plugin>.hpi.pinned
+* restart jenkins 
+
+what to do when you see a broken build for project in jenkins 
+* open the console and see if there are any missing files
+* check the logs 
+
+how to schedule a build in jenkins
+* SCM commits
+* completion of other builds
+* run at a specific time
+* manual build request
+
+What is the use of pipeline in jenkins?
+* pipeline plugin is used to make the jenkins pipeline, which gives us a view of stages and tasks to perform step by step. 
+
+What is agent, post-section, jenkinsfile
+* agent is a runner/directive to tell jenkins to execute the pipeline in a particular manner
+* post-section is an after script task to be performed at the end of a pipeline 
+* jenkinfile is a gitlab-ci file where the pipeline flow is defined 
+
+What is cloud computing, and how can jenkins fit into a cloud environment?
+* cloud computing on demand availability of computer system resources (CPU, RAM and storage) in data centers and access with the internet. 
+* jenkind has pluginf to connect to data centers and can build and manage the ci/cd process for application builds on the cloud.
+
+kubernetes and jenkins
+* kubenetes plugin on jenkins can be used for continuos deployment 
+
+automated test on jenkins with selenium or maven
+* schedule test and view output when complete 
+
+in pipeline, first job successfil, 2nd job failed.
+* check logs
+* check if dependencies/folders are avalibable
+* restart from stage to verify/review 
+
+JENKINS_HOME directory
+all settings, logs and configs are stored here.
+
+backup plugin 
+used backup all settings and configs to be used in future in case of failure  
+
+What is trigger
+trigger is used to define when the pipeline should begin execution 
+typicalling when you make a commit and a change is made to the code in the SCM
+
+how do you wnat to define parameters
+* depends on the desired output, we can specify several input parameters, like a string or file.
+
+configure the jenkins node agent to communicate with master 
+browser - jnlp(a java web start file) is downloaded and a process is launched on node to run job
+command line - it need an agent.exe or jar.file, run the file to launch a process on node to communicate with master and runs the job.
+
+3 ways to authenticate users (during push on git)
+default - store userdata in internal database 
+application server - configure auth defined by app server
+LDAP server - auth with LDAP 
+
+using 3rd party tools in jenkins
+* install the 3rd party software
+* download the plugin 
+* configue the tool and plugin in admin console
+* use the pluging in the build jobs 
+
+pipelines in jenkins
+* ci/cd 
+* scripted pipeline - using scripting principles
+* declarative pipeline - define steps to attain a desired state
+
+
+Jenkins syntax to schedule builds or SVN polling (run cron jobs)
+* cron syntax 
+
+examples of environment varaibles 
+* WORKSPACE 
+* JOB_NAME
+* NODE_NAME
+* BUILD_URL
+
+what is a DSL jenkins
+* domain specific language is used to descible jobs with groovy
+
+creating a multibranch pipeline (featurebranch--MR--devbranch--MR--master)
+* each pipeline has its own jenkinsfile in the same project.
+* jenkins will discover the jenkinsfile and execute 
+
+types of jobs in jenkins 
+* custom 
+* maven build 
+* pipeline 
+* multibranch pipeline 
+* external 
+* github 
+
+------------------
+------------------
+
+### AWS ###
+
+Best practice
+* Plan for security (IAM policies)
+* Plan for scalability (LoadBalancing)
+* Plan for disaster recovery & high availability (use automated monitoring, failure detection LoadBalancing healthchecks)
+* Plan for cost optimization (autoscaling, using lambda serveless,)
+* Plan for monitoring (cloudwatch logs)
+* Plan for archiving and storage (s3 and glacier)
+
+* IAM
+  * policies that define permissions
+    * Allow (resources & environment)
+    * Deny (resources & environment)
+  * control access to APIs with permissions so that we can manage the communication between applications and microservices
+* networking
+  * vpc (networking layer for your infrastructure)
+  * subnet (range of IP addresses in your VPC)
+  * CIDR (Classless Inter-Domain Routing. An internet protocol address allocation and route aggregation)
+  * security group (virtual firewall controlling traffic in and out of your resource)
+    * exposing external ports (443, 80, etc)
+    * Inbound rules control the incoming traffic to your instance through the port 
+    * outbound rules control the outgoing traffic from your instance through the port 
+
+
+VPC CIDR: 10.0.0.0/16
+AWS Subnet CIDR: Starts from 10
+10.0.10.0/24 (IP range: 10.0.10.0 - 10.0.10.255)
+10.0.11.0/24 (IP range: 10.0.11.0 - 10.0.11.255)
+10.0.12.0/24 (IP range: 10.0.12.0 - 10.0.12.255)
+
+CIRD: 10.0.10.0/24
+10.0.10.0 - Network address
+10.0.10.1 - Reserved for AWS
+10.0.10.2 - Reserved for AWS
+10.0.10.3 - Reserved for AWS
+10.0.10.255 - Reserved for AWS
+
+Local Network IP range
+10.0.0.0 - 10.255.255.255
+172.16.0.0 - 172.31.255.255
+192.168.0.0 - 192.168.255.255
+
+* setup an ec2
+* setup a database (RDS)
+* lambda (serveless) and its quota
+  * lamnda function for executing a defined task or set of actions like  gauge reading for an application running on an ec2 instance.
+  * lambda application that uses a combination of the lambda function + other aws resources to create a light wieght app like website or chatbot.
+* ECS manages containers similar to EKS on a smaller scale
+  - using fargate so aws can manage it for us
+  - manually setting it up
+    * build image
+    * define and deploy ec2 instances
+    * manage compute and memory resources
+    * isolate application & deploy in separate containers
+    * run and manage infrastructure
+  - AWS copilot is an automated way of deploying ECS by defining the parameters we need.
+
+* billing
+  * billing alerts
+  * reading a bill 
+  * cost management
+  * reservations
+
+-----------------------------
+-----------------------------
+
+# Project. 
+# modules you should improve for the future roles
+* terraform 
+* kafka
+* s3
+* ec2 
+* airflow
+* bash 
+
+for the deplyment AI modules to AWS RDS, and AWS EC2.
+for automating the workflow with CI/CD gitlab, jenkins, github action.
+for automating the entire infrastructre with terraform  
+all using best practices.
+
+
+# Project 
+migration to kubernetes from local server.
+cicd.
+terraform. 
+using data ops strategy and tools.
+
+
+
+
