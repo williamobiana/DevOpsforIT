@@ -44,7 +44,7 @@ Ventoy is a combo of GUI and CLI tool. It can be used on any Linux distribution.
 * the extracted folder, and you’ll find a few scripts in it.
 * use the commandline to run the file called VentoyGUI. x86_64. 
 ```
-sudo ./VentoyGUI. x86_64`
+sudo ./VentoyGUI. x86_64
 ```
 
 ### Use ventoy to create bootable windows 10 usb:
